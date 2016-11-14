@@ -1,0 +1,109 @@
+Address Book Design Overview
+
+Summary
+    The application allows the user to manage people's contact information.  Add, edit, retrieve
+    contact details.
+
+
+Use Cases
+
+    User adds new contact to the address book.
+        They are prompted to enter the contact's relevant details.  New address book entry is 
+        created for this person.
+
+    User searches for specific contact in the address book.
+        At the search screen, user fills in the search criteria and begins search.  Results
+        screen is populated with list of all contacts that match the search. Selecting any of the
+        search results opens a detail view of that contact.
+
+    User browses the address book
+        Without providing specific search criteria, the user browses the address book entries
+        alphabetically by name in the browsing view.
+
+    User deletes a contact from the address book
+        The user opens the detail view of an address book entry (either by browsing to that entry
+        or searching specifically for them based on their info) and presses the delete button to
+        remove the entry from the address book.
+
+Data Model
+    
+    Address Book Entry
+        - First Name
+        - Last Name
+        - Address
+        - Phone Number
+        - Cell Phone Number
+        - Fax Number
+        - Email
+        - Notes
+
+
+Forms
+
+    Main Form / View
+        Main application view.  Allows the user to browse the address book, open the 'Add Contact'
+        form, open the 'Search' form, open the 'Detail' form of any of the entries as they browse.
+
+    Add Contact Form
+        This is where the user enters the details of a new contact.  When they hit OK on this one
+        the new entry is created. Contains all the same fields as the Detail view of an existing
+        contact so there is some shared functionality here that can be reused for both. Basically
+        an empty version of the Detail view form of an existing contact.
+
+    Detail View
+        Displays all the fields of an individual contact.  Allows editing of an existing contact
+
+
+Implementation Details
+    
+    Front End / GUI
+        Not decided yet which GUI kit will be used. Looking at wxwidgets & Qt.  Would like it to
+        be cross platform.
+
+    Back End
+        SQLite will be used for the backend persistent storage of the address book.  Realistically
+        this is probably a bit of overkill for the amount & type of records in this program but
+        that's OK. Learning to use the SQLite API is part of the goal of this project so I'm OK
+        with it being overkill.
+
+        
+        The back end code will be encapsulated to hide the details of the storage operations
+        allowing for replacement of the back end with a different solution while maintaining
+        the same interface to the core application code.
+       Presentation Logic
+    -Create UI elements
+    -Add elements to main window layout
+
+Application Logic
+    -Validate input
+    -Make reqeuests to Data Model based on values entered in UI (Presentation Logic)
+
+Data Model Logic
+    -Manage database connection
+    -Retrieve raw rows of data from the database and return data object
+    -Package raw database fields into data object
+
+
+
+What interfaces do each of these layers provide to one another?
+
+    Data Model
+        connect/open - establishes connection to the underlying data storage
+        system, be it flat file, database, network server, etc...  This would
+        have to happen at the very start of execution and raise a program ending
+        error if a connection to the data source could not be established. This
+        operation could occur automatically upon creation of the data source
+        object, in the constructor.
+
+        getContacts - retrieve data from the data source and return a usable
+        data object.  Data will need to be able to be retrieved by a variety of
+        search criteria (name, phone number, etc...).  There's probably a more
+        elegant solution to that than simply having a bunch of differen
+        methods depending on what you want to search by (i.e. getContactByName,
+        getContactByPhoneNumber, getContactByAddress, etc...)
+
+        addContact -
+
+        updateContact -
+
+        deleteContact  
